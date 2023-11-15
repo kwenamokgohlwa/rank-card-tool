@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { withAuthenticator, useAuthenticator } from '@aws-amplify/ui-react';
+import { withAuthenticator } from '@aws-amplify/ui-react';
 import { API, graphqlOperation } from 'aws-amplify';
-import { createCreditCard } from '../graphql/mutations';
+import { createCreditCard, updateCreditCard } from '../graphql/mutations';
 import { listCreditCards } from '../graphql/queries';
+import { CreditCardCreateForm, CreditCardUpdateForm } from '../ui-components';
 
 const App = () => {
-  const { user, signOut } = useAuthenticator((context) => [context.user]);
   const [capturedCards, setCapturedCards] = useState([]);
+  const [selectedCard, setSelectedCard] = useState(null);
 
   useEffect(() => {
     fetchCreditCards();
@@ -21,24 +22,44 @@ const App = () => {
     }
   };
 
-  const handleCardSubmit = async (cardDetails) => {
+  const handleCardCreate = async (cardDetails) => {
     try {
       await API.graphql(graphqlOperation(createCreditCard, { input: cardDetails }));
-      fetchCreditCards();
+      fetchCreditCards(); // Update the list of captured cards
     } catch (error) {
       console.error('Error adding credit card:', error);
     }
   };
 
+  const handleCardUpdate = async (cardDetails) => {
+    try {
+      await API.graphql(graphqlOperation(updateCreditCard, { input: cardDetails }));
+      fetchCreditCards(); // Update the list of captured cards
+      setSelectedCard(null); // Reset selected card after update
+    } catch (error) {
+      console.error('Error updating credit card:', error);
+    }
+  };
+
+  const handleEditClick = (card) => {
+    setSelectedCard(card);
+  };
+
   return (
     <div>
       <h1>Credit Card Validation</h1>
-      <button onClick={signOut}>Sign Out</button>
+      <CreditCardCreateForm onCreate={handleCardCreate} />
+      {selectedCard && (
+        <CreditCardUpdateForm card={selectedCard} onUpdate={handleCardUpdate} onCancel={() => setSelectedCard(null)} />
+      )}
       <div>
         <h2>Captured Cards</h2>
         <ul>
           {capturedCards.map((card) => (
-            <li key={card.id}>{card.number}</li>
+            <li key={card.id}>
+              {card.number}{' '}
+              <button onClick={() => handleEditClick(card)}>Edit</button>
+            </li>
           ))}
         </ul>
       </div>
