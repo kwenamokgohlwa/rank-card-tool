@@ -24,12 +24,8 @@ const CreditCardForm = ({ onCardSubmit }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Additional validation logic here
-
     try {
       const { token } = await stripe.createToken(elements.getElement(CardElement), cardDetails);
-
-      // Handle response, maybe update state with the captured cards
       onCardSubmit(token.card);
     } catch (error) {
       console.error('Error creating token:', error);

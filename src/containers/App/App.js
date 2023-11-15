@@ -4,13 +4,12 @@ import { loadStripe } from '@stripe/stripe-js';
 import CreditCardForm from '../../components/CreditCardForm/CreditCardForm';
 import './App.css';
 
-const stripePromise = loadStripe('your-publishable-key'); // Replace with your actual Stripe publishable key
+const stripePromise = loadStripe('your-publishable-key');
 
 const App = () => {
   const [capturedCards, setCapturedCards] = useState([]);
 
   const handleCardSubmit = (card) => {
-    // Check if the card is already captured
     if (!capturedCards.some((c) => c.number === card.number)) {
       setCapturedCards([...capturedCards, card]);
     }
