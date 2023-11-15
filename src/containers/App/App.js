@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
-import CreditCardForm from '../../components/CreditCardForm/CreditCardForm';
+import CreditCardForm from '../components/CreditCardForm/CreditCardForm';
 import './App.css';
 
 const stripePromise = loadStripe('your-publishable-key'); // Replace with your actual Stripe publishable key
