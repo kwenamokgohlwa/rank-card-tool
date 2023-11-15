@@ -1,13 +1,25 @@
-import { API } from 'aws-amplify';
+import { API, graphqlOperation } from 'aws-amplify';
+import { createCreditCard } from '../graphql/mutations';
+import { listCreditCards } from '../graphql/queries';
 
-export const validateCard = async (cardDetails) => {
+export const addCreditCard = async (cardDetails) => {
   try {
-    const response = await API.post('yourApiName', '/validate-card', {
-      body: cardDetails,
-    });
-    return response;
+    const response = await API.graphql(graphqlOperation(createCreditCard, { input: cardDetails }));
+    console.log('Credit card added:', response.data.createCreditCard);
+    return response.data.createCreditCard;
   } catch (error) {
-    console.error('Error validating card:', error);
+    console.error('Error adding credit card:', error);
+    throw error;
+  }
+};
+
+export const getAllCreditCards = async () => {
+  try {
+    const response = await API.graphql(graphqlOperation(listCreditCards));
+    console.log('All credit cards:', response.data.listCreditCards.items);
+    return response.data.listCreditCards.items;
+  } catch (error) {
+    console.error('Error fetching credit cards:', error);
     throw error;
   }
 };

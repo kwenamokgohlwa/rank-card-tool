@@ -12,6 +12,10 @@
     margin: 10px 0;
   }
   
+  .card-element {
+    margin-bottom: 20px;
+  }
+  
   .button {
     background-color: #007bff;
     color: #fff;
@@ -23,4 +27,3 @@
   .button:hover {
     background-color: #0056b3;
   }
-  

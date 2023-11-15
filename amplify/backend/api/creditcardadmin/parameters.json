@@ -1,0 +1,11 @@
+{
+  "AppSyncApiName": "creditcardadmin",
+  "DynamoDBBillingMode": "PAY_PER_REQUEST",
+  "DynamoDBEnableServerSideEncryption": false,
+  "AuthCognitoUserPoolId": {
+    "Fn::GetAtt": [
+      "authcreditcardadmin8ed54cb7",
+      "Outputs.UserPoolId"
+    ]
+  }
+}
